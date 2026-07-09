@@ -36,8 +36,14 @@ class Worker(AbstractUser):
         related_name="workers",
     )
 
+    class Meta:
+        verbose_name = "worker"
+        verbose_name_plural = "workers"
+
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        if self.first_name and self.last_name:
+            return f"{self.username} ({self.first_name} {self.last_name})"
+        return self.username
 
 
 class Team(models.Model):
@@ -75,7 +81,7 @@ class Task(models.Model):
     priority = models.CharField(
         max_length=10,
         choices=PRIORITY_CHOICES.items(),
-        default=PRIORITY_CHOICES.get("MEDIUM"),
+        default="MEDIUM",
     )
     assignees = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
