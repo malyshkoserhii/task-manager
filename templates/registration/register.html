@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% load tailwind_filters %}
+
+{% block content %}
+  <div class="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-sm border border-gray-100 mt-10">
+    <h2 class="text-2xl font-bold text-gray-900 mb-6 tracking-tight text-center">Create an Account</h2>
+
+    <form action="" method="post" class="space-y-4">
+      {% csrf_token %}
+      {{ form|crispy }}
+
+      <button
+        type="submit"
+        class="w-full mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 px-4 rounded-xl shadow-sm transition-all duration-200 hover:shadow-md focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 active:scale-98 cursor-pointer flex justify-center items-center gap-2"
+      >
+        <span>Register</span>
+        <span>✨</span>
+      </button>
+    </form>
+  </div>
+{% endblock %}

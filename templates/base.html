@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Task Manager{% endblock %}</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="flex flex-col min-h-screen bg-gray-50 text-gray-900">
+
+{% include "includes/navigation.html" %}
+
+<main class="flex-grow container mx-auto px-4 py-8 max-w-7xl">
+  {% block content %}
+  {% endblock %}
+</main>
+
+<footer class="bg-white border-t border-gray-200 py-4 text-center text-xs text-gray-500 mt-auto">
+  &copy; 2026 IT Task Manager Application. All rights reserved.
+</footer>
+<script>
+    document.addEventListener('click', function (event) {
+        const dropdown = document.getElementById('user-dropdown');
+
+        if (dropdown && dropdown.hasAttribute('open') && !dropdown.contains(event.target)) {
+            dropdown.removeAttribute('open');
+        }
+    });
+
+    document.addEventListener('click', function (event) {
+    const desktopDropdown = document.getElementById('user-dropdown');
+    const mobileBurger = document.getElementById('mobile-burger');
+
+    if (desktopDropdown && desktopDropdown.hasAttribute('open') && !desktopDropdown.contains(event.target)) {
+      desktopDropdown.removeAttribute('open');
+    }
+
+    if (mobileBurger && mobileBurger.hasAttribute('open') && !mobileBurger.contains(event.target)) {
+      mobileBurger.removeAttribute('open');
+    }
+  });
+</script>
+</body>
+</html>
