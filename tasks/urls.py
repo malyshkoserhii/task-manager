@@ -1,8 +1,14 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 
-from tasks.views import index, ProjectsListView
-from views import RegisterUserView
+from tasks.views import (
+    index,
+    ProjectsListView,
+    RegisterUserView,
+    ProjectCreateView,
+    ProjectDeleteView,
+    ProjectUpdateView,
+)
 
 urlpatterns = [
     # Public routes
@@ -10,6 +16,13 @@ urlpatterns = [
     path("registration/", RegisterUserView.as_view(), name="registration"),
     # Private routes
     path("projects/", ProjectsListView.as_view(), name="project-list"),
+    path("projects/create/", ProjectCreateView.as_view(), name="project-create"),
+    path(
+        "projects/<int:pk>/update/", ProjectUpdateView.as_view(), name="project-update"
+    ),
+    path(
+        "projects/<int:pk>/delete/", ProjectDeleteView.as_view(), name="project-delete"
+    ),
     path(
         "password-change/",
         auth_views.PasswordChangeView.as_view(

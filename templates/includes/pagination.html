@@ -1,0 +1,99 @@
+{% if is_paginated %}
+  <div class="flex items-center justify-between border-t border-gray-200 px-4 py-4 sm:px-0 mt-10">
+    <div class="flex flex-1 justify-between sm:hidden">
+      {% if page_obj.has_previous %}
+        <a href="{% querystring page=page_obj.previous_page_number  %}"
+           class="inline-flex items-center rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+          Previous
+        </a>
+      {% else %}
+        <span
+            class="inline-flex items-center rounded-xl border border-gray-200 bg-gray-50 px-4 py-2 text-sm font-medium text-gray-400 cursor-not-allowed">
+          Previous
+        </span>
+      {% endif %}
+
+      {% if page_obj.has_next %}
+        <a href="{% querystring page=page_obj.next_page_number %}"
+           class="inline-flex items-center rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+          Next
+        </a>
+      {% else %}
+        <span
+            class="inline-flex items-center rounded-xl border border-gray-200 bg-gray-50 px-4 py-2 text-sm font-medium text-gray-400 cursor-not-allowed">
+          Next
+        </span>
+      {% endif %}
+    </div>
+
+    <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+      <div>
+        <p class="text-sm text-gray-500">
+          Showing <span class="font-medium text-gray-900">{{ page_obj.start_index }}</span> to <span
+            class="font-medium text-gray-900">{{ page_obj.end_index }}</span> of <span
+            class="font-medium text-gray-900">{{ paginator.count }}</span> items
+        </p>
+      </div>
+      <div>
+        <nav class="isolate inline-flex -space-x-px rounded-xl bg-white p-0.5 border border-gray-200"
+             aria-label="Pagination">
+
+          {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}"
+               class="inline-flex items-center rounded-lg p-2 text-gray-400 hover:bg-gray-50 hover:text-indigo-600 transition-colors">
+              <span class="sr-only">Previous</span>
+              <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd"
+                      d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z"
+                      clip-rule="evenodd"/>
+              </svg>
+            </a>
+          {% else %}
+            <span class="inline-flex items-center rounded-lg p-2 text-gray-300 cursor-not-allowed">
+              <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd"
+                      d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z"
+                      clip-rule="evenodd"/>
+              </svg>
+            </span>
+          {% endif %}
+
+          {% for num in paginator.page_range %}
+            {% if page_obj.number == num %}
+              <span aria-current="page"
+                    class="relative z-10 inline-flex items-center rounded-lg bg-indigo-600 px-3.5 py-2 text-sm font-semibold text-white shadow-xs">
+                {{ num }}
+              </span>
+            {% else %}
+              <a href="?page={{ num }}"
+                 class="relative inline-flex items-center rounded-lg px-3.5 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-indigo-600 transition-all">
+                {{ num }}
+              </a>
+            {% endif %}
+          {% endfor %}
+
+          {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}"
+               class="inline-flex items-center rounded-lg p-2 text-gray-400 hover:bg-gray-50 hover:text-indigo-600 transition-colors">
+              <span class="sr-only">Next</span>
+              <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd"
+                      d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                      clip-rule="evenodd"/>
+              </svg>
+            </a>
+          {% else %}
+            <span class="inline-flex items-center rounded-lg p-2 text-gray-300 cursor-not-allowed">
+              <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd"
+                      d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                      clip-rule="evenodd"/>
+              </svg>
+            </span>
+          {% endif %}
+
+        </nav>
+      </div>
+    </div>
+  </div>
+{% endif %}

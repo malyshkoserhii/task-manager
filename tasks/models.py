@@ -64,7 +64,16 @@ class Team(models.Model):
 class Project(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
-    team = models.ManyToManyField(Team, related_name="projects")
+    teams = models.ManyToManyField(
+        Team,
+        related_name="projects",
+        blank=True,
+    )
+    creator = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="created_projects",
+    )
 
     class Meta:
         ordering = ("name",)
