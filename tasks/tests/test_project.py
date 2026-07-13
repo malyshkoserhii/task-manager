@@ -1,5 +1,6 @@
 from django.test import TestCase, Client
 from django.contrib.auth import get_user_model
+from django.urls import reverse
 
 from tasks.forms.project import ProjectCreateForm, ProjectSearchForm
 from tasks.models import Team, Project
@@ -45,7 +46,7 @@ class ProjectBusinessLogicTest(TestCase):
 
     def test_custom_queryset_limit(self):
         self.client.force_login(self.user)
-        response = self.client.get("/projects/")
+        response = self.client.get(reverse("tasks:project-list"))
         projects = response.context["projects"]
         self.assertEqual(len(projects), 2)
         self.assertIn(self.p1, projects)
