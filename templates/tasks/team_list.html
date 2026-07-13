@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_filters %}
+
+{% block content %}
+  <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-8">
+
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-950 tracking-tight">👥 My Teams</h1>
+        <p class="text-sm text-gray-500 mt-1">Organize colleagues, assign core responsibilities, and manage access.</p>
+      </div>
+
+      <a href="{% url 'tasks:team-create' %}"
+         class="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-sm rounded-xl shadow-xs hover:shadow-md transition-all duration-200 active:scale-98 cursor-pointer whitespace-nowrap">
+        <span>✨ Create Team</span>
+      </a>
+    </div>
+
+    {% if team_list %}
+      <div class="bg-white border border-gray-200 rounded-2xl shadow-xs overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200 text-left">
+            <thead class="bg-gray-50/75">
+            <tr>
+              <th scope="col" class="px-6 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">Team
+                Name
+              </th>
+              <th scope="col" class="px-6 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                Description
+              </th>
+              <th scope="col" class="px-6 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">Members
+                Count
+              </th>
+            </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 bg-white">
+            {% for team in team_list %}
+              <tr onclick="location.href='{% url 'tasks:team-update' pk=team.id %}'"
+                  class="hover:bg-gray-50/75 cursor-pointer transition-colors duration-150">
+
+                <td class="whitespace-nowrap px-6 py-4">
+                  <div class="flex items-center gap-3">
+                    <div
+                        class="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-50 font-semibold text-indigo-600">
+                      {{ team.name|slice:":2"|upper }}
+                    </div>
+                    <div class="font-semibold text-gray-900">{{ team.name }}</div>
+                  </div>
+                </td>
+
+                <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">
+                  {{ team.description|default:"No description provided." }}
+                </td>
+
+                <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-600">
+                    <span
+                        class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800 border border-gray-200">
+                      👤 {{ team.members.count }} members
+                    </span>
+                </td>
+
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {% include 'includes/pagination.html' %}
+
+    {% else %}
+      <div
+          class="text-center py-16 bg-gray-50/50 border border-dashed border-gray-200 rounded-2xl max-w-md mx-auto mt-12 p-8">
+        <div class="text-4xl mb-4">🛸</div>
+        <h3 class="text-base font-semibold text-gray-900">No teams created yet</h3>
+        <p class="text-sm text-gray-500 mt-1 max-w-xs mx-auto">
+          {% if all_users_count <= 1 %}
+            You are currently the only user in the workspace. Create a team now, and you can add teammates as soon as
+            they join!
+          {% else %}
+            Create your first team to bundle permissions and start collaborating with colleagues.
+          {% endif %}
+        </p>
+        <div class="mt-6">
+          <a href="{% url 'tasks:team-create' %}"
+             class="inline-flex items-center gap-1.5 text-sm font-medium text-indigo-600 hover:text-indigo-500 transition-colors">
+            Create a team now <span class="text-xs">➔</span>
+          </a>
+        </div>
+      </div>
+    {% endif %}
+
+  </div>
+{% endblock %}

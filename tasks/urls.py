@@ -8,6 +8,11 @@ from tasks.views import (
     ProjectCreateView,
     ProjectDeleteView,
     ProjectUpdateView,
+    TeamsListView,
+    TeamCreateView,
+    TeamUpdateView,
+    TeamDeleteView,
+    TeamLeaveView,
 )
 
 urlpatterns = [
@@ -22,6 +27,23 @@ urlpatterns = [
     ),
     path(
         "projects/<int:pk>/delete/", ProjectDeleteView.as_view(), name="project-delete"
+    ),
+    path(
+        "teams/", TeamsListView.as_view(), name="team-list"
+    ),
+    path("teams/create/", TeamCreateView.as_view(), name="team-create"),
+    path(
+        "teams/<int:pk>/update/", TeamUpdateView.as_view(), name="team-update"
+    ),
+    path(
+        "teams/<int:pk>/delete/",
+        TeamDeleteView.as_view(),
+        name="team-delete",
+    ),
+    path(
+        "teams/<int:pk>/leave/",
+        TeamLeaveView.as_view(),
+        name="team-leave",
     ),
     path(
         "password-change/",
