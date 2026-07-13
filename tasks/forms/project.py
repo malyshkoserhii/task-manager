@@ -1,5 +1,4 @@
 from django import forms
-from django.contrib.auth import user_logged_in
 
 from tasks.models import Project, Team
 
@@ -38,7 +37,7 @@ class ProjectCreateForm(forms.ModelForm):
         auth_user = kwargs.pop("user", None)
         super().__init__(*args, **kwargs)
 
-        if user_logged_in:
+        if auth_user and auth_user.is_authenticated:
             self.fields["teams"].queryset = Team.objects.filter(members=auth_user)
 
         self.fields["name"].label = "Project Name"
@@ -51,5 +50,9 @@ class ProjectSearchForm(forms.Form):
         max_length=100,
         required=False,
         label="",
-        widget=forms.TextInput(attrs={"placeholder": "Search project by name"}),
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Search project by name"
+            }
+        ),
     )
