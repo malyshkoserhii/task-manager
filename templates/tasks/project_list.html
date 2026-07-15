@@ -54,24 +54,31 @@
     {% if projects %}
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for project in projects %}
+          <!-- 1. Повертаємо div для всієї картки. Клас "relative" тут критично важливий! -->
           <div
-              class="bg-white border border-gray-200 rounded-2xl p-6 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between group relative overflow-hidden cursor-pointer hover:scale-[1.02]">
+              class="bg-white border border-gray-200 rounded-2xl p-6 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between group relative overflow-hidden hover:scale-[1.02]">
 
             <div>
               <div
                   class="absolute top-0 left-0 right-0 h-1.5 bg-indigo-600/10 group-hover:bg-indigo-600 transition-colors"></div>
 
               <div class="flex justify-between items-start mb-3 gap-2">
+                <!-- 2. Робимо назву проекту посиланням на таски, але розтягуємо його на ВСЮ картку -->
                 <h3 class="text-lg font-bold text-gray-900 group-hover:text-indigo-600 transition-colors truncate max-w-[65%]">
-                  {{ project.name }}
+                  <a href="{% url 'tasks:project-tasks' pk=project.id %}"
+                     class="after:absolute after:inset-0 after:z-0">
+                    {{ project.name }}
+                  </a>
                 </h3>
 
+                <!-- 3. Кнопкам керування додаємо class "relative z-10" (або підвищуємо z-index),
+                     щоб вони лежали ПОВЕРХ розтягнутого посилання і на них можна було клікнути -->
                 <div class="flex items-center gap-2 relative z-10">
                   {% if project.creator == user %}
                     <span
                         class="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-100 whitespace-nowrap">
-                      Owner
-                    </span>
+            Owner
+          </span>
 
                     <a href="{% url 'tasks:project-update' pk=project.id %}"
                        class="p-1.5 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors duration-200"
@@ -95,12 +102,13 @@
                   {% else %}
                     <span
                         class="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-gray-50 text-gray-600 border border-gray-100 whitespace-nowrap">
-                      Member
-                    </span>
+            Member
+          </span>
                   {% endif %}
                 </div>
               </div>
 
+              <!-- Текст опису залишається незмінним -->
               <p class="text-sm text-gray-500 line-clamp-3 mb-6 leading-relaxed">
                 {{ project.description|default:"No description provided for this project." }}
               </p>
@@ -110,18 +118,18 @@
               <div class="flex items-center gap-1.5 text-xs font-medium text-gray-500">
                 <span>👥</span>
                 <span>
-                {% if project.teams.all %}
-                  {{ project.teams.all|join:", " }}
-                {% else %}
-                  Personal
-                {% endif %}
-              </span>
+      {% if project.teams.all %}
+        {{ project.teams.all|join:", " }}
+      {% else %}
+        Personal
+      {% endif %}
+    </span>
               </div>
 
               <span
                   class="text-gray-400 group-hover:text-indigo-600 group-hover:translate-x-1 transition-all duration-200 text-sm">
-              ➔
-            </span>
+      ➔
+    </span>
             </div>
 
           </div>

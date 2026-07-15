@@ -2,15 +2,15 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.http import HttpResponse, HttpRequest
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import generic
 
+from forms.task import TaskCreateForm
 from tasks.forms.team import TeamCreateForm
 from tasks.forms.auth import WorkerCreationForm
 from tasks.forms.project import ProjectCreateForm, ProjectSearchForm
-from tasks.models import Project, Team
-
+from tasks.models import Project, Team, Task
 
 User = get_user_model()
 
@@ -131,7 +131,7 @@ class TeamDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 class TeamLeaveWarningView(LoginRequiredMixin, generic.DeleteView):
     model = Team
-    template_name = "tasks/team_delete_confirm.html"
+    template_name = "tasks/team_confirm_delete.html"
 
 
 class TeamLeaveView(LoginRequiredMixin, generic.DetailView):
@@ -142,3 +142,132 @@ class TeamLeaveView(LoginRequiredMixin, generic.DetailView):
         team = self.get_object()
         team.members.remove(request.user)
         return redirect("tasks:team-list")
+
+
+class ProjectTaskListView(LoginRequiredMixin, generic.ListView):
+    model = Task
+    template_name = "tasks/project_task_list.html"
+    context_object_name = "tasks"
+    project = None
+
+    def setup(self, request, *args, **kwargs):
+        super().setup(request, *args, **kwargs)
+        project_id = self.kwargs.get("pk")
+        self.project = get_object_or_404(Project, pk=project_id)
+
+    def get_queryset(self):
+        return Task.objects.filter(
+            project=self.project
+        ).select_related(
+            "task_type"
+        ).prefetch_related(
+            "assignees"
+        )
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["project"] = self.project
+        return context
+
+
+class ProjectTaskCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Task
+    form_class = TaskCreateForm
+    project = None
+
+    def setup(self, request, *args, **kwargs):
+        super().setup(request, *args, **kwargs)
+        project_id = self.kwargs.get("pk")
+        self.project = get_object_or_404(Project, pk=project_id)
+
+    def form_valid(self, form):
+        task = form.save(commit=False)
+        task.project = self.project
+        task.save()
+        form.save_m2m()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy("tasks:project-tasks", kwargs={
+            "pk": self.project.id
+        })
+    
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["project"] = self.project
+        return context
+
+
+class ProjectTaskUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Task
+    form_class = TaskCreateForm
+    project = None
+
+    def setup(self, request, *args, **kwargs):
+        super().setup(request, **kwargs)
+        project_id = self.kwargs.get("project_pk")
+        self.project = get_object_or_404(Project, pk=project_id)
+
+    def get_queryset(self):
+        return Task.objects.filter(project=self.project)
+
+    def form_valid(self, form):
+        task = form.save(commit=False)
+        task.project = self.project
+        task.save()
+        form.save_m2m()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy("tasks:project-tasks", kwargs={
+            "pk": self.project.id
+        })
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["project"] = self.project
+        context["is_update"] = True
+        return context
+
+
+class ProjectTaskDetailView(LoginRequiredMixin, generic.DetailView):
+    model = Task
+    project = None
+    template_name = "tasks/task_detail.html"
+
+    def setup(self, request, *args, **kwargs):
+        super().setup(request, **kwargs)
+        project_id = self.kwargs.get("project_pk")
+        self.project = get_object_or_404(Project, pk=project_id)
+
+    def get_queryset(self):
+        return Task.objects.filter(project=self.project)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["project"] = self.project
+        return context
+
+
+class ProjectTaskDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Task
+    template_name = "tasks/task_confirm_delete.html"
+    project = None
+
+    def setup(self, request, *args, **kwargs):
+        super().setup(request, **kwargs)
+        project_id = self.kwargs.get("project_pk")
+        self.project = get_object_or_404(Project, pk=project_id)
+
+    def get_queryset(self):
+        return Task.objects.filter(project=self.project)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["project"] = self.project
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy("tasks:project-tasks", kwargs={
+            "pk": self.project.id
+        })
