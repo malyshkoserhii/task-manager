@@ -55,7 +55,7 @@ class TeamTest(TestCase):
             "members": [
                 self.bilbo.id,
                 self.gandalf.id,
-            ]
+            ],
         }
         response = self.client.post(
             reverse("tasks:team-create"),
@@ -78,10 +78,7 @@ class TeamTest(TestCase):
         self.client.force_login(self.frodo)
 
         response = self.client.post(
-            reverse(
-                "tasks:team-leave",
-                kwargs={"pk": self.frodo_team.id}
-            ),
+            reverse("tasks:team-leave", kwargs={"pk": self.frodo_team.id}),
         )
         self.assertEqual(response.status_code, 302)
         self.assertTrue(Team.objects.filter(name="Frodo Team").exists())

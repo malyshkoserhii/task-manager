@@ -11,24 +11,24 @@ class ProjectCreateForm(forms.ModelForm):
             "name": forms.TextInput(
                 attrs={
                     "class": "w-full px-4 py-2.5 rounded-xl border border-gray-200 "
-                             "focus:outline-hidden focus:ring-2 focus:ring-indigo-500 "
-                             "focus:border-indigo-500 transition-all text-sm",
+                    "focus:outline-hidden focus:ring-2 focus:ring-indigo-500 "
+                    "focus:border-indigo-500 transition-all text-sm",
                     "placeholder": "e.g., Mobile App MVP",
                 }
             ),
             "description": forms.Textarea(
                 attrs={
                     "class": "w-full px-4 py-2.5 rounded-xl border border-gray-200 "
-                             "focus:outline-hidden focus:ring-2 focus:ring-indigo-500 "
-                             "focus:border-indigo-500 transition-all "
-                             "text-sm h-32 resize-none",
+                    "focus:outline-hidden focus:ring-2 focus:ring-indigo-500 "
+                    "focus:border-indigo-500 transition-all "
+                    "text-sm h-32 resize-none",
                     "placeholder": "Describe the goals and scope of this project...",
                 }
             ),
             "teams": forms.CheckboxSelectMultiple(
                 attrs={
                     "class": "rounded border-gray-300 text-indigo-600 "
-                             "focus:ring-indigo-500"
+                    "focus:ring-indigo-500"
                 }
             ),
         }
@@ -50,9 +50,5 @@ class ProjectSearchForm(forms.Form):
         max_length=100,
         required=False,
         label="",
-        widget=forms.TextInput(
-            attrs={
-                "placeholder": "Search project by name"
-            }
-        ),
+        widget=forms.TextInput(attrs={"placeholder": "Search project by name"}),
     )

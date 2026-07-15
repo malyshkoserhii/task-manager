@@ -93,9 +93,7 @@ class Task(models.Model):
         default=Priority.MEDIUM,
     )
     status = models.CharField(
-        max_length=30,
-        choices=TaskStatus,
-        default=TaskStatus.TO_DO
+        max_length=30, choices=TaskStatus, default=TaskStatus.TO_DO
     )
     assignees = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
@@ -107,11 +105,7 @@ class Task(models.Model):
         related_name="tasks",
     )
     task_type = models.ForeignKey(
-        TaskType,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="tasks"
+        TaskType, on_delete=models.SET_NULL, null=True, blank=True, related_name="tasks"
     )
 
     class Meta:

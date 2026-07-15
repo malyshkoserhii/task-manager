@@ -54,7 +54,6 @@
     {% if projects %}
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for project in projects %}
-          <!-- 1. Повертаємо div для всієї картки. Клас "relative" тут критично важливий! -->
           <div
               class="bg-white border border-gray-200 rounded-2xl p-6 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between group relative overflow-hidden hover:scale-[1.02]">
 
@@ -63,7 +62,6 @@
                   class="absolute top-0 left-0 right-0 h-1.5 bg-indigo-600/10 group-hover:bg-indigo-600 transition-colors"></div>
 
               <div class="flex justify-between items-start mb-3 gap-2">
-                <!-- 2. Робимо назву проекту посиланням на таски, але розтягуємо його на ВСЮ картку -->
                 <h3 class="text-lg font-bold text-gray-900 group-hover:text-indigo-600 transition-colors truncate max-w-[65%]">
                   <a href="{% url 'tasks:project-tasks' pk=project.id %}"
                      class="after:absolute after:inset-0 after:z-0">
@@ -71,8 +69,6 @@
                   </a>
                 </h3>
 
-                <!-- 3. Кнопкам керування додаємо class "relative z-10" (або підвищуємо z-index),
-                     щоб вони лежали ПОВЕРХ розтягнутого посилання і на них можна було клікнути -->
                 <div class="flex items-center gap-2 relative z-10">
                   {% if project.creator == user %}
                     <span

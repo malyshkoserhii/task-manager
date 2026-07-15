@@ -55,7 +55,7 @@ class TaskAdmin(admin.ModelAdmin):
         "project",
     )
     list_filter = ("status", "priority")
-    search_fields = ("name", )
+    search_fields = ("name",)
 
     def short_description(self, obj):
         if not obj.description:

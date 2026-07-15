@@ -24,19 +24,19 @@ class TeamCreateForm(forms.ModelForm):
             "name": forms.TextInput(
                 attrs={
                     "class": "w-full px-4 py-2.5 rounded-xl border border-gray-200 "
-                             "focus:outline-hidden focus:ring-2 focus:ring-indigo-500 "
-                             "text-sm",
+                    "focus:outline-hidden focus:ring-2 focus:ring-indigo-500 "
+                    "text-sm",
                     "placeholder": "e.g., Frontend Avengers",
                 }
             ),
             "description": forms.Textarea(
                 attrs={
                     "class": "w-full px-4 py-2.5 rounded-xl border border-gray-200 "
-                             "focus:outline-hidden focus:ring-2 focus:ring-indigo-500 "
-                             "text-sm h-24 resize-none",
+                    "focus:outline-hidden focus:ring-2 focus:ring-indigo-500 "
+                    "text-sm h-24 resize-none",
                     "placeholder": "What is this team responsible for...",
                 }
-            )
+            ),
         }
 
     def __init__(self, *args, **kwargs):

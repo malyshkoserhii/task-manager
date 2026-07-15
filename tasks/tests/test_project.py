@@ -62,17 +62,13 @@ class ProjectBusinessLogicTest(TestCase):
         self.assertNotIn(self.other_team, teams_in_form)
 
     def test_search_my_projects_not_empty(self):
-        form_data = {
-            "name": "money"
-        }
+        form_data = {"name": "money"}
         form = ProjectSearchForm(data=form_data)
         self.assertTrue(form.is_valid())
         self.assertEqual(form.cleaned_data, form_data)
 
     def test_search_my_projects_empty(self):
-        form_data = {
-            "name": ""
-        }
+        form_data = {"name": ""}
         form = ProjectSearchForm(data=form_data)
         self.assertTrue(form.is_valid())
         self.assertEqual(form.cleaned_data, form_data)
@@ -81,6 +77,5 @@ class ProjectBusinessLogicTest(TestCase):
         form = ProjectSearchForm()
         self.assertEqual(form.fields["name"].label, "")
         self.assertEqual(
-            form.fields["name"].widget.attrs["placeholder"],
-            "Search project by name"
+            form.fields["name"].widget.attrs["placeholder"], "Search project by name"
         )
