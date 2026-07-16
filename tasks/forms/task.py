@@ -38,7 +38,7 @@ class TaskCreateForm(forms.ModelForm):
                              "px-3 py-2 text-sm bg-white "
                              "focus:border-indigo-500 focus:ring-indigo-500 "
                              "cursor-pointer w-full",
-                    "placeholder": "Select deadline date and time2"
+                    "placeholder": "Select deadline date and time"
                 },
                 format="%Y-%m-%dT%H:%M",
             ),
