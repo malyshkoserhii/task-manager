@@ -49,13 +49,13 @@ class TaskAdmin(admin.ModelAdmin):
     list_display = (
         "name",
         "short_description",
-        "is_completed",
+        "status",
         "priority",
         "deadline",
         "project",
     )
-    list_filter = ("is_completed", "priority")
-    search_fields = ["name"]
+    list_filter = ("status", "priority")
+    search_fields = ("name",)
 
     def short_description(self, obj):
         if not obj.description:

@@ -2,7 +2,7 @@
   <div class="flex items-center justify-between border-t border-gray-200 px-4 py-4 sm:px-0 mt-10">
     <div class="flex flex-1 justify-between sm:hidden">
       {% if page_obj.has_previous %}
-        <a href="{% querystring page=page_obj.previous_page_number  %}"
+        <a href="{% querystring page=page_obj.previous_page_number %}"
            class="inline-flex items-center rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
           Previous
         </a>
@@ -39,7 +39,7 @@
              aria-label="Pagination">
 
           {% if page_obj.has_previous %}
-            <a href="?page={{ page_obj.previous_page_number }}"
+            <a href="{% querystring page=page_obj.previous_page_number %}"
                class="inline-flex items-center rounded-lg p-2 text-gray-400 hover:bg-gray-50 hover:text-indigo-600 transition-colors">
               <span class="sr-only">Previous</span>
               <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -65,7 +65,7 @@
                 {{ num }}
               </span>
             {% else %}
-              <a href="?page={{ num }}"
+              <a href="{% querystring page=num %}"
                  class="relative inline-flex items-center rounded-lg px-3.5 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-indigo-600 transition-all">
                 {{ num }}
               </a>
@@ -73,7 +73,7 @@
           {% endfor %}
 
           {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}"
+            <a href="{% querystring page=page_obj.next_page_number %}"
                class="inline-flex items-center rounded-lg p-2 text-gray-400 hover:bg-gray-50 hover:text-indigo-600 transition-colors">
               <span class="sr-only">Next</span>
               <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">

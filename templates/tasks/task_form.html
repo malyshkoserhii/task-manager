@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 bg-slate-50 min-h-screen flex flex-col justify-center">
+
+    <div class="mb-6">
+      <nav class="flex" aria-label="Breadcrumb">
+        <ol class="flex items-center space-x-2 text-xs font-medium text-gray-500">
+          <li>
+            <a href="{% url 'tasks:project-list' %}" class="hover:text-gray-700 transition">Projects</a>
+          </li>
+          <li><span class="text-gray-400">/</span></li>
+          <li>
+            <a href="{% url 'tasks:project-tasks' pk=project.id %}"
+               class="hover:text-gray-700 transition">{{ project.name }}</a>
+          </li>
+          <li><span class="text-gray-400">/</span></li>
+          <li class="text-indigo-600 font-semibold">
+            {{ is_update|yesno:"Edit Task,New Task" }}
+          </li>
+        </ol>
+      </nav>
+    </div>
+
+    <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+
+      <div class="border-b border-gray-100 bg-gray-50/50 px-8 py-6">
+        <div class="flex items-center gap-3">
+        <span class="text-2xl">
+          {{ is_update|yesno:"📝,✨" }}
+        </span>
+          <div>
+            <h1 class="text-xl font-bold text-gray-900">
+              {{ is_update|yesno:"Update Task Details,Create New Task" }}
+            </h1>
+            <p class="text-xs text-gray-500 mt-1">
+              Project: <span class="font-semibold text-indigo-600">{{ project.name }}</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <form action="" method="post" class="p-8 space-y-6">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+          <div class="p-4 mb-4 text-sm text-red-700 bg-red-50 rounded-xl border border-red-100">
+            {% for error in form.non_field_errors %}
+              <p>{{ error }}</p>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        <div class="space-y-5">
+          {{ form|crispy }}
+        </div>
+
+        <div class="border-t border-gray-100 pt-6 flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
+        
+          <a href="{% url 'tasks:project-tasks' pk=project.id %}"
+             class="inline-flex items-center justify-center px-5 py-2.5 border border-gray-300 text-sm font-semibold rounded-xl text-gray-700 bg-white hover:bg-gray-50 transition-all duration-200">
+            Cancel
+          </a>
+
+          <button type="submit"
+                  class="inline-flex items-center justify-center px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-200">
+            {% if is_update %}
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                   stroke="currentColor" class="w-4 h-4 mr-2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/>
+              </svg>
+              Save Changes
+            {% else %}
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                   stroke="currentColor" class="w-4 h-4 mr-2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+              </svg>
+              Create Task
+            {% endif %}
+          </button>
+
+        </div>
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

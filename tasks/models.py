@@ -2,15 +2,15 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 from task_manager import settings
-from tasks.constants.choices import PRIORITY_CHOICES
+from tasks.constants.choices import Priority, TaskStatus
 
 
 class TaskType(models.Model):
     name = models.CharField(max_length=100)
 
     class Meta:
-        verbose_name = "task_type"
-        verbose_name_plural = "task_types"
+        verbose_name = "task type"
+        verbose_name_plural = "task types"
         ordering = ("name",)
 
     def __str__(self):
@@ -86,11 +86,14 @@ class Task(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
     deadline = models.DateTimeField()
-    is_completed = models.BooleanField(default=False)
-    priority = models.CharField(
-        max_length=10,
-        choices=PRIORITY_CHOICES.items(),
-        default="MEDIUM",
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    priority = models.IntegerField(
+        choices=Priority,
+        default=Priority.MEDIUM,
+    )
+    status = models.CharField(
+        max_length=30, choices=TaskStatus, default=TaskStatus.TO_DO
     )
     assignees = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
@@ -101,9 +104,12 @@ class Task(models.Model):
         on_delete=models.CASCADE,
         related_name="tasks",
     )
+    task_type = models.ForeignKey(
+        TaskType, on_delete=models.SET_NULL, null=True, blank=True, related_name="tasks"
+    )
 
     class Meta:
-        ordering = ("deadline",)
+        ordering = ("priority", "-created_at")
 
     def __str__(self):
         deadline = self.deadline.strftime("%d-%m-%Y")
