@@ -158,12 +158,10 @@ class ProjectTaskListView(LoginRequiredMixin, generic.ListView):
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
-        queryset = Task.objects.filter(
-            project=self.project
-        ).select_related(
-            "task_type"
-        ).prefetch_related(
-            "assignees"
+        queryset = (
+            Task.objects.filter(project=self.project)
+            .select_related("task_type")
+            .prefetch_related("assignees")
         )
 
         form = TaskSearchForm(self.request.GET)
@@ -189,9 +187,8 @@ class ProjectTaskListView(LoginRequiredMixin, generic.ListView):
             done=Count("id", filter=Q(status="DONE")),
             in_progress=Count("id", filter=Q(status="IN_PROGRESS")),
             overdue=Count(
-                "id",
-                filter=Q(deadline__lt=timezone.now()) & ~Q(status="DONE")
-            )
+                "id", filter=Q(deadline__lt=timezone.now()) & ~Q(status="DONE")
+            ),
         )
 
         return context

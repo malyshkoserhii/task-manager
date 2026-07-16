@@ -11,9 +11,7 @@ class TaskCreateForm(forms.ModelForm):
         queryset=TaskType.objects.all(),
         required=False,
         empty_label="Select task type",
-        widget=forms.Select(
-            attrs={"class": "form-select"}
-        )
+        widget=forms.Select(attrs={"class": "form-select"}),
     )
 
     class Meta:
@@ -31,14 +29,14 @@ class TaskCreateForm(forms.ModelForm):
                 attrs={
                     "type": "text",
                     "onfocus": "this.type='datetime-local'; "
-                               "try { this.showPicker(); } catch(e) {}",
+                    "try { this.showPicker(); } catch(e) {}",
                     "onclick": "try { this.showPicker(); } catch(e) {}",
                     "onblur": "if(!this.value) this.type='text'",
                     "class": "border border-gray-200 rounded-xl "
-                             "px-3 py-2 text-sm bg-white "
-                             "focus:border-indigo-500 focus:ring-indigo-500 "
-                             "cursor-pointer w-full",
-                    "placeholder": "Select deadline date and time"
+                    "px-3 py-2 text-sm bg-white "
+                    "focus:border-indigo-500 focus:ring-indigo-500 "
+                    "cursor-pointer w-full",
+                    "placeholder": "Select deadline date and time",
                 },
                 format="%Y-%m-%dT%H:%M",
             ),
@@ -66,9 +64,7 @@ class TaskCreateForm(forms.ModelForm):
             return deadline
 
         if deadline < today:
-            raise forms.ValidationError(
-                "Deadline cannot be less than current time."
-            )
+            raise forms.ValidationError("Deadline cannot be less than current time.")
         return deadline
 
 
@@ -81,8 +77,8 @@ class TaskSearchForm(forms.Form):
             attrs={
                 "placeholder": "Search tasks by name...",
                 "class": "w-full pl-10 pr-4 py-2 border border-gray-200 "
-                         "rounded-xl focus:border-indigo-500 focus:ring-indigo-500 "
-                         "text-sm bg-white",
+                "rounded-xl focus:border-indigo-500 focus:ring-indigo-500 "
+                "text-sm bg-white",
             }
         ),
     )
@@ -93,8 +89,8 @@ class TaskSearchForm(forms.Form):
         widget=forms.Select(
             attrs={
                 "class": "border border-gray-200 rounded-xl px-3 py-2 text-sm "
-                         "bg-white focus:border-indigo-500 focus:ring-indigo-500 "
-                         "cursor-pointer"
+                "bg-white focus:border-indigo-500 focus:ring-indigo-500 "
+                "cursor-pointer"
             }
         ),
     )
@@ -106,7 +102,7 @@ class TaskSearchForm(forms.Form):
         widget=forms.Select(
             attrs={
                 "class": "border border-gray-200 rounded-xl px-3 py-2 text-sm bg-white "
-                         "focus:border-indigo-500 focus:ring-indigo-500 cursor-pointer"
+                "focus:border-indigo-500 focus:ring-indigo-500 cursor-pointer"
             }
         ),
     )
@@ -117,7 +113,7 @@ class TaskSearchForm(forms.Form):
         widget=forms.Select(
             attrs={
                 "class": "border border-gray-200 rounded-xl px-3 py-2 text-sm bg-white "
-                         "focus:border-indigo-500 focus:ring-indigo-500 cursor-pointer"
+                "focus:border-indigo-500 focus:ring-indigo-500 cursor-pointer"
             }
         ),
     )
@@ -129,7 +125,7 @@ class TaskSearchForm(forms.Form):
         widget=forms.Select(
             attrs={
                 "class": "border border-gray-200 rounded-xl px-3 py-2 text-sm bg-white "
-                         "focus:border-indigo-500 focus:ring-indigo-500 cursor-pointer"
+                "focus:border-indigo-500 focus:ring-indigo-500 cursor-pointer"
             }
         ),
     )
@@ -144,7 +140,7 @@ class TaskSearchForm(forms.Form):
         widget=forms.Select(
             attrs={
                 "class": "border border-gray-200 rounded-xl px-3 py-2 text-sm bg-white "
-                         "focus:border-indigo-500 focus:ring-indigo-500 cursor-pointer"
+                "focus:border-indigo-500 focus:ring-indigo-500 cursor-pointer"
             }
         ),
     )
@@ -162,7 +158,7 @@ class TaskSearchForm(forms.Form):
         widget=forms.Select(  # 💡 Змінили на Select
             attrs={
                 "class": "border border-gray-200 rounded-xl px-3 py-2 text-sm bg-white "
-                         "focus:border-indigo-500 focus:ring-indigo-500 cursor-pointer"
+                "focus:border-indigo-500 focus:ring-indigo-500 cursor-pointer"
             }
         ),
     )
