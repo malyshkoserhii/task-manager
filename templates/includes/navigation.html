@@ -13,13 +13,14 @@
       {% if user.is_authenticated %}
         <div class="hidden sm:flex items-center gap-1">
           <a href="{% url 'tasks:project-list' %}"
-             class="px-3 py-1.5 text-sm font-medium rounded-lg transition-all focus:outline-hidden focus:ring-2 focus:ring-indigo-500 {% if request.resolver_match.url_name == 'project-list' %}bg-indigo-50 text-indigo-700{% else %}text-gray-600 hover:text-gray-900 hover:bg-gray-50{% endif %}"
-             tabindex="0">
+             class="flex items-center gap-2 py-2 px-3 rounded-lg text-sm font-medium {% if '/projects/' in request.path %}bg-indigo-50 text-indigo-700{% else %}text-gray-700 hover:bg-gray-50{% endif %}">
             Projects
           </a>
+
           <a href="{% url 'tasks:team-list' %}"
-             class="px-3 py-1.5 text-sm font-medium rounded-lg transition-all focus:outline-hidden focus:ring-2 focus:ring-indigo-500 {% if request.resolver_match.url_name == 'team-list' %}bg-indigo-50 text-indigo-700{% else %}text-gray-600 hover:text-gray-900 hover:bg-gray-50{% endif %}"
-             tabindex="0">Teams</a>
+             class="flex items-center gap-2 py-2 px-3 rounded-lg text-sm font-medium {% if '/teams/' in request.path %}bg-indigo-50 text-indigo-700{% else %}text-gray-700 hover:bg-gray-50{% endif %}">
+            Teams
+          </a>
         </div>
       {% endif %}
     </div>
@@ -40,7 +41,6 @@
 
           <div
               class="absolute right-0 mt-2.5 w-48 bg-white border border-gray-100 rounded-xl shadow-md py-1.5 z-50 origin-top-right">
-            <!-- 💡 Видалили блоки My Projects, My Teams, My Tasks -->
             <a href="{% url 'password_change' %}"
                class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"><span>🔑</span>
               Change Password</a>
@@ -78,15 +78,19 @@
             <div class="flex flex-col gap-1">
               <p class="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Workspace</p>
               <a href="{% url 'tasks:project-list' %}"
-                 class="flex items-center gap-2 py-2 px-3 rounded-lg text-sm font-medium {% if request.resolver_match.url_name == 'project-list' %}bg-indigo-50 text-indigo-700{% else %}text-gray-700 hover:bg-gray-50{% endif %}">Projects</a>
+                 class="flex items-center gap-2 py-2 px-3 rounded-lg text-sm font-medium {% if '/projects/' in request.path %}bg-indigo-50 text-indigo-700{% else %}text-gray-700 hover:bg-gray-50{% endif %}">
+                Projects
+              </a>
+
               <a href="{% url 'tasks:team-list' %}"
-                 class="flex items-center gap-2 py-2 px-3 rounded-lg text-sm font-medium {% if request.resolver_match.url_name == 'team-list' %}bg-indigo-50 text-indigo-700{% else %}text-gray-700 hover:bg-gray-50{% endif %}">Teams</a>
+                 class="flex items-center gap-2 py-2 px-3 rounded-lg text-sm font-medium {% if '/teams/' in request.path %}bg-indigo-50 text-indigo-700{% else %}text-gray-700 hover:bg-gray-50{% endif %}">
+                Teams
+              </a>
             </div>
 
             <div class="border-t border-gray-100 my-1"></div>
 
             <div class="flex flex-col gap-1">
-              <!-- 💡 Спростили мобільне меню, прибравши видалені пункти та зайві підзаголовки -->
               <a href="{% url 'password_change' %}"
                  class="flex items-center gap-2 py-2 px-3 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"><span>🔑</span>
                 Change Password</a>
