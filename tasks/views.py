@@ -150,7 +150,7 @@ class TeamLeaveView(LoginRequiredMixin, generic.DetailView):
 
 class ProjectTaskListView(LoginRequiredMixin, generic.ListView):
     model = Task
-    template_name = "tasks/project_task_list.html"  # Твій шлях до темплейту
+    template_name = "tasks/project_task_list.html"
     context_object_name = "tasks"
     paginate_by = 10
     project = None
@@ -371,11 +371,10 @@ class ProjectTaskDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 class CommentUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Comment
-    fields = ("text",)  # Використовуємо те саме поле
-    template_name = "tasks/comment_form.html"  # Створимо простий темплейт
+    fields = ("text",)
+    template_name = "tasks/comment_form.html"
 
     def get_queryset(self):
-        # Редагувати можна ТІЛЬКИ свої коментарі
         return super().get_queryset().filter(author=self.request.user)
 
     def get_success_url(self):
