@@ -147,15 +147,15 @@ class TaskSearchForm(forms.Form):
     created_at = forms.ChoiceField(
         choices=[
             ("", "Sort by created at..."),
-            ("created_at_asc", "Oldest First 🗓️"),  # Спочатку створені давно (asc)
+            ("created_at_asc", "Oldest First 🗓️"),
             (
                 "created_at_desc",
                 "Newest First ⏳",
-            ),  # Спочатку створені нещодавно (desc)
+            ),
         ],
         required=False,
         label="",
-        widget=forms.Select(  # 💡 Змінили на Select
+        widget=forms.Select(
             attrs={
                 "class": "border border-gray-200 rounded-xl px-3 py-2 text-sm bg-white "
                 "focus:border-indigo-500 focus:ring-indigo-500 cursor-pointer"
