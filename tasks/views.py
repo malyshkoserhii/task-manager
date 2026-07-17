@@ -1,18 +1,20 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator
 from django.db import models
 from django.db.models import Q, Count
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.utils import timezone
 from django.views import generic
 
-from forms.task import TaskCreateForm, TaskSearchForm
+from tasks.forms.comment import CommentCreateForm
+from tasks.forms.task import TaskCreateForm, TaskSearchForm
 from tasks.forms.team import TeamCreateForm
 from tasks.forms.auth import WorkerCreationForm
 from tasks.forms.project import ProjectCreateForm, ProjectSearchForm
-from tasks.models import Project, Team, Task
+from tasks.models import Project, Team, Task, Comment
 
 User = get_user_model()
 
@@ -194,7 +196,6 @@ class ProjectTaskListView(LoginRequiredMixin, generic.ListView):
         return context
 
     def _apply_filters(self, queryset, cleaned_data):
-        """Внутрішній метод для послідовної фільтрації тасок."""
         name = cleaned_data.get("name")
         if name:
             queryset = queryset.filter(name__icontains=name)
@@ -218,7 +219,6 @@ class ProjectTaskListView(LoginRequiredMixin, generic.ListView):
         return queryset
 
     def _apply_sorting(self, queryset, cleaned_data):
-        """Внутрішній метод для збору правил сортування та їх застосування."""
         sorting_rules = []
 
         deadline = cleaned_data.get("deadline")
@@ -311,7 +311,40 @@ class ProjectTaskDetailView(LoginRequiredMixin, generic.DetailView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context["project"] = self.project
+
+        if "comment_form" not in context:
+            context["comment_form"] = CommentCreateForm()
+
+        all_comments = self.object.comments.all()
+
+        paginator = Paginator(all_comments, 5)
+
+        page_number = self.request.GET.get("page")
+
+        comments_page = paginator.get_page(page_number)
+
+        context["comments"] = comments_page
+
         return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = CommentCreateForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.task = self.object
+            comment.author = request.user
+            comment.save()
+            return redirect(
+                reverse(
+                    "tasks:project-task-detail",
+                    kwargs={"project_pk": self.project.pk, "pk": self.object.pk},
+                )
+            )
+
+        context = self.get_context_data()
+        context["comment_form"] = form
+        return self.render_to_response(context)
 
 
 class ProjectTaskDeleteView(LoginRequiredMixin, generic.DeleteView):
@@ -334,3 +367,41 @@ class ProjectTaskDeleteView(LoginRequiredMixin, generic.DeleteView):
 
     def get_success_url(self):
         return reverse_lazy("tasks:project-tasks", kwargs={"pk": self.project.id})
+
+
+class CommentUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Comment
+    fields = ("text",)  # Використовуємо те саме поле
+    template_name = "tasks/comment_form.html"  # Створимо простий темплейт
+
+    def get_queryset(self):
+        # Редагувати можна ТІЛЬКИ свої коментарі
+        return super().get_queryset().filter(author=self.request.user)
+
+    def get_success_url(self):
+        comment = self.get_object()
+        page_number = self.request.GET.get("page", 1)
+        base_url = reverse(
+            "tasks:project-task-detail",
+            kwargs={"project_pk": comment.task.project.pk, "pk": comment.task.pk},
+        )
+        return f"{base_url}?page={page_number}"
+
+
+class CommentDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Comment
+    template_name = "tasks/comment_confirm_delete.html"
+
+    def get_queryset(self):
+        return super().get_queryset().filter(author=self.request.user)
+
+    def get_success_url(self):
+        comment = self.get_object()
+        page_number = self.request.GET.get("page", 1)
+
+        base_url = reverse(
+            "tasks:project-task-detail",
+            kwargs={"project_pk": comment.task.project.pk, "pk": comment.task.pk},
+        )
+
+        return f"{base_url}?page={page_number}"

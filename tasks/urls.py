@@ -18,6 +18,8 @@ from tasks.views import (
     ProjectTaskUpdateView,
     ProjectTaskDetailView,
     ProjectTaskDeleteView,
+    CommentUpdateView,
+    CommentDeleteView,
 )
 
 urlpatterns = [
@@ -56,6 +58,10 @@ urlpatterns = [
         ProjectTaskDeleteView.as_view(),
         name="project-task-delete",
     ),
+    path("comments/<int:pk>/edit/", CommentUpdateView.as_view(), name="comment-update"),
+    path(
+        "comments/<int:pk>/delete/", CommentDeleteView.as_view(), name="comment-delete"
+    ),
     path("teams/", TeamsListView.as_view(), name="team-list"),
     path("teams/create/", TeamCreateView.as_view(), name="team-create"),
     path("teams/<int:pk>/update/", TeamUpdateView.as_view(), name="team-update"),
@@ -75,14 +81,14 @@ urlpatterns = [
             template_name="registration/password_change_form.html",
             success_url="/password-change/done/",
         ),
-        name="password_change",
+        name="password-change",
     ),
     path(
         "password-change/done/",
         auth_views.PasswordChangeDoneView.as_view(
             template_name="registration/password_change_done.html"
         ),
-        name="password_change_done",
+        name="password-change-done",
     ),
 ]
 

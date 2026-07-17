@@ -128,30 +128,11 @@ class Comment(models.Model):
         on_delete=models.CASCADE,
         related_name="comments",
     )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ("task",)
 
     def __str__(self):
         return f"Author ID: {self.author.id}"
-
-
-class Like(models.Model):
-    comment = models.ForeignKey(
-        Comment,
-        on_delete=models.CASCADE,
-        related_name="likes",
-    )
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name="likes",
-    )
-
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=["comment", "user"],
-                name="unique_like_comment_user",
-            )
-        ]

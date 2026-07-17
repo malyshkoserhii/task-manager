@@ -18,29 +18,9 @@
 <footer class="bg-white border-t border-gray-200 py-4 text-center text-xs text-gray-500 mt-auto">
   &copy; 2026 IT Task Manager Application. All rights reserved.
 </footer>
+
 {% block extra_js %}
 {% endblock %}
-<script>
-    document.addEventListener('click', function (event) {
-        const dropdown = document.getElementById('user-dropdown');
 
-        if (dropdown && dropdown.hasAttribute('open') && !dropdown.contains(event.target)) {
-            dropdown.removeAttribute('open');
-        }
-    });
-
-    document.addEventListener('click', function (event) {
-    const desktopDropdown = document.getElementById('user-dropdown');
-    const mobileBurger = document.getElementById('mobile-burger');
-
-    if (desktopDropdown && desktopDropdown.hasAttribute('open') && !desktopDropdown.contains(event.target)) {
-      desktopDropdown.removeAttribute('open');
-    }
-
-    if (mobileBurger && mobileBurger.hasAttribute('open') && !mobileBurger.contains(event.target)) {
-      mobileBurger.removeAttribute('open');
-    }
-  });
-</script>
 </body>
 </html>
