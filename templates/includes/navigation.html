@@ -1,10 +1,8 @@
 {% load static %}
 
-<!-- Global Navbar Container -->
 <nav class="bg-white border-b border-gray-200 py-4 px-6 relative shadow-sm">
   <div class="max-w-7xl mx-auto flex justify-between items-center">
 
-    <!-- Left Side: Logo + Desktop Navigation -->
     <div class="flex items-center gap-8">
       <a href="{% url 'tasks:index' %}"
          class="text-xl font-bold text-indigo-600 tracking-tight focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 rounded-lg"
@@ -12,7 +10,6 @@
         🚀 TaskManager
       </a>
 
-      <!-- Desktop App Navigation (Hidden on Mobile) -->
       {% if user.is_authenticated %}
         <div class="hidden sm:flex items-center gap-1">
           <a href="{% url 'tasks:project-list' %}"
@@ -27,11 +24,9 @@
       {% endif %}
     </div>
 
-    <!-- Right Side: Desktop Dropdown & Unified Mobile Burger -->
     <div class="flex items-center gap-4">
       {% if user.is_authenticated %}
 
-        <!-- 1. Desktop Profile Menu (Hidden on Mobile) -->
         <details id="user-dropdown" class="hidden sm:inline-block relative text-left list-none group">
           <summary
               class="flex items-center gap-2.5 cursor-pointer select-none text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors list-none [&::-webkit-details-marker]:hidden focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 rounded-xl p-0.5"
@@ -69,7 +64,6 @@
           </div>
         </details>
 
-        <!-- 2. Mobile Burger Menu (Visible only on Mobile) -->
         <details id="mobile-burger" class="sm:hidden block list-none group">
           <summary
               class="p-2 text-gray-600 hover:text-indigo-600 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-indigo-500 cursor-pointer list-none [&::-webkit-details-marker]:hidden"
@@ -80,7 +74,7 @@
 
           <div
               class="absolute top-full left-0 right-0 bg-white border-b border-gray-200 shadow-lg p-4 z-50 flex flex-col gap-3 animate-fade-in">
-            <!-- User Info Header -->
+
             <div class="flex items-center gap-3 border-b border-gray-100 pb-3 mb-1">
               <img src="{% static 'tasks/images/cat-avatar.jpg' %}" alt="Cat avatar"
                    class="w-10 h-10 rounded-full border border-indigo-200 object-cover">
@@ -90,7 +84,6 @@
               </div>
             </div>
 
-            <!-- Block 1: Global Workspace Navigation -->
             <div class="flex flex-col gap-1">
               <p class="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Workspace</p>
               <a href="{% url 'tasks:project-list' %}"
@@ -101,7 +94,6 @@
 
             <div class="border-t border-gray-100 my-1"></div>
 
-            <!-- Block 2: Personal Profile Menu (Brought from User Dropdown) -->
             <div class="flex flex-col gap-1">
               <p class="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Personal Menu</p>
               <a href="{% url 'tasks:project-list' %}"
@@ -123,7 +115,6 @@
 
             <div class="border-t border-gray-100 my-1"></div>
 
-            <!-- Logout Button -->
             <form action="{% url 'logout' %}" method="post" class="w-full">
               {% csrf_token %}
               <button type="submit"
