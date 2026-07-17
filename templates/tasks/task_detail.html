@@ -70,86 +70,157 @@
 
         </div>
 
+        <!-- 💬 ОЖИВЛЕНИЙ БЛОК КОМЕНТАРІВ -->
         <div class="bg-white border border-gray-200 rounded-2xl p-6 sm:p-8 shadow-xs space-y-6">
           <h3 class="text-lg font-bold text-gray-900 border-b border-gray-100 pb-4 flex items-center gap-2">
             <span>💬</span> Comments <span
-              class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full font-semibold">3</span>
+              class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full font-semibold">{{ comments.paginator.count|default:comments.count }}</span>
           </h3>
 
-          <div class="flex gap-3 items-start">
+          <!-- Форма створення коментаря -->
+          <form method="post" action="" class="flex gap-3 items-start">
+            {% csrf_token %}
             <div
-                class="flex items-center justify-center h-8 w-8 rounded-full bg-indigo-600 text-[10px] font-bold text-white uppercase leading-none">
-              ME
+                class="flex items-center justify-center h-8 w-8 rounded-full bg-indigo-600 text-[10px] font-bold text-white uppercase leading-none mt-1">
+              {{ request.user.username|slice:":2" }}
             </div>
             <div class="flex-1">
-            <textarea disabled
-                      rows="3"
-                      class="block w-full rounded-xl border border-gray-200 px-4 py-3 text-sm focus:border-indigo-500 focus:ring-indigo-500 bg-gray-50/50 text-gray-400 cursor-not-allowed"
-                      placeholder="Comments functionality is coming in the next task..."></textarea>
+              <div class="relative">
+                {{ comment_form.text }}
+              </div>
+
+              {% if comment_form.text.errors %}
+                <div class="text-xs text-red-600 mt-1 font-medium">
+                  {{ comment_form.text.errors }}
+                </div>
+              {% endif %}
+
               <div class="mt-2 flex justify-end">
-                <button type="button" disabled
-                        class="inline-flex items-center justify-center px-4 py-2 bg-gray-300 text-white text-xs font-semibold rounded-lg cursor-not-allowed">
+                <button type="submit"
+                        class="inline-flex items-center justify-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-lg shadow-xs transition duration-150">
                   Add Comment
                 </button>
               </div>
             </div>
+          </form>
+
+          <!-- Динамічний список коментарів із бази -->
+          <div class="space-y-4 pt-4 border-t border-gray-100">
+            {% for comment in comments %}
+              <div
+                  class="flex gap-3 items-start p-3 hover:bg-slate-50/50 rounded-xl transition duration-150 {% if not forloop.first %}border-t border-gray-50{% endif %}">
+                <!-- Аватар автора -->
+                <div
+                    class="flex items-center justify-center h-8 w-8 rounded-full bg-indigo-100 text-[10px] font-bold text-indigo-700 uppercase leading-none flex-shrink-0 mt-0.5">
+                  {{ comment.author.username|slice:":2" }}
+                </div>
+
+                <div class="flex-1 space-y-1.5">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-semibold text-gray-900">@{{ comment.author.username }}</span>
+
+                    {% if comment.author == request.user %}
+                      <div class="flex items-center space-x-2">
+                        <a href="{% url 'tasks:comment-update' pk=comment.id %}?page={{ comments.number|default:1 }}"
+                           class="text-[10px] text-indigo-600 hover:text-indigo-800 transition">Edit</a>
+                        <span class="text-[9px] text-gray-300">|</span>
+                        <a href="{% url 'tasks:comment-delete' pk=comment.id %}?page={{ comments.number|default:1 }}"
+                           class="text-[10px] text-red-600 hover:text-red-800 transition">Delete</a>
+                      </div>
+                    {% endif %}
+                  </div>
+
+                  <p class="text-sm text-gray-600 whitespace-pre-line leading-relaxed">{{ comment.text }}</p>
+
+                  <div class="flex items-center space-x-2 text-[10px] text-gray-400 pt-0.5">
+                    <span>{{ comment.created_at|date:"d M Y, H:i" }}</span>
+
+                    {% if comment.created_at|date:"YmdHi" < comment.updated_at|date:"YmdHi" %}
+                      <span class="text-gray-300">·</span>
+                      <span class="italic text-amber-600 font-medium"
+                            title="Edited at {{ comment.updated_at|date:'d M Y, H:i' }}">
+                        Edited ({{ comment.updated_at|date:"H:i" }})
+                      </span>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            {% empty %}
+              <div class="text-center py-6 text-sm text-gray-400 italic">
+                No comments yet. Be the first to leave a thought! 😉
+              </div>
+            {% endfor %}
           </div>
 
-          <div class="space-y-4 pt-4">
+          {% if comments.has_other_pages %}
+            <div class="flex items-center justify-between border-t border-gray-100 pt-4 mt-4">
+              <!-- Мобільна версія пагінації (прості кнопки Previous/Next) -->
+              <div class="flex flex-1 justify-between sm:hidden">
+                {% if comments.has_previous %}
+                  <a href="?page={{ comments.previous_page_number }}"
+                     class="relative inline-flex items-center rounded-md border border-gray-200 bg-white px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 transition">Previous</a>
+                {% else %}
+                  <span
+                      class="relative inline-flex items-center rounded-md border border-gray-100 bg-gray-50 px-4 py-2 text-xs font-medium text-gray-400 cursor-not-allowed">Previous</span>
+                {% endif %}
 
-            <div class="flex gap-3 items-start p-3 hover:bg-slate-50/50 rounded-xl transition duration-150">
-              <div
-                  class="flex items-center justify-center h-8 w-8 rounded-full bg-emerald-100 text-[10px] font-bold text-emerald-700 uppercase leading-none">
-                JD
+                {% if comments.has_next %}
+                  <a href="?page={{ comments.next_page_number }}"
+                     class="relative ml-3 inline-flex items-center rounded-md border border-gray-200 bg-white px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 transition">Next</a>
+                {% else %}
+                  <span
+                      class="relative ml-3 inline-flex items-center rounded-md border border-gray-100 bg-gray-50 px-4 py-2 text-xs font-medium text-gray-400 cursor-not-allowed">Next</span>
+                {% endif %}
               </div>
-              <div class="flex-1 space-y-1">
-                <div class="flex items-center justify-between">
-                  <span class="text-xs font-semibold text-gray-900">John Doe</span>
-                  <span class="text-[10px] text-gray-400">2 hours ago</span>
+
+              <!-- Десктопна версія пагінації (з цифрами сторінок) -->
+              <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+                <div>
+                  <p class="text-xs text-gray-500">
+                    Showing page <span class="font-semibold text-gray-900">{{ comments.number }}</span> of <span
+                      class="font-semibold text-gray-900">{{ comments.paginator.num_pages }}</span>
+                  </p>
                 </div>
-                <p class="text-sm text-gray-600">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                </p>
+                <div>
+                  <nav class="isolate inline-flex -space-x-px rounded-lg shadow-xs border border-gray-200 bg-white"
+                       aria-label="Pagination">
+                    <!-- Кнопка назад (‹) -->
+                    {% if comments.has_previous %}
+                      <a href="?page={{ comments.previous_page_number }}"
+                         class="relative inline-flex items-center rounded-l-lg px-3 py-2 text-gray-400 hover:bg-gray-50 focus:z-20 transition text-sm">
+                        ‹
+                      </a>
+                    {% else %}
+                      <span
+                          class="relative inline-flex items-center rounded-l-lg px-3 py-2 text-gray-300 bg-gray-50/50 cursor-not-allowed text-sm">‹</span>
+                    {% endif %}
+
+                    <!-- Рендеринг номерів сторінок -->
+                    {% for num in comments.paginator.page_range %}
+                      {% if comments.number == num %}
+                        <span aria-current="page"
+                              class="relative z-10 inline-flex items-center bg-indigo-600 px-3 py-1.5 text-xs font-semibold text-white focus:z-20">{{ num }}</span>
+                      {% elif num > comments.number|add:"-3" and num < comments.number|add:"3" %}
+                        <a href="?page={{ num }}"
+                           class="relative inline-flex items-center px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 focus:z-20 transition">{{ num }}</a>
+                      {% endif %}
+                    {% endfor %}
+
+                    <!-- Кнопка вперед (›) -->
+                    {% if comments.has_next %}
+                      <a href="?page={{ comments.next_page_number }}"
+                         class="relative inline-flex items-center rounded-r-lg px-3 py-2 text-gray-400 hover:bg-gray-50 focus:z-20 transition text-sm">
+                        ›
+                      </a>
+                    {% else %}
+                      <span
+                          class="relative inline-flex items-center rounded-r-lg px-3 py-2 text-gray-300 bg-gray-50/50 cursor-not-allowed text-sm">›</span>
+                    {% endif %}
+                  </nav>
+                </div>
               </div>
             </div>
-
-            <div
-                class="flex gap-3 items-start p-3 hover:bg-slate-50/50 rounded-xl transition duration-150 border-t border-gray-50">
-              <div
-                  class="flex items-center justify-center h-8 w-8 rounded-full bg-purple-100 text-[10px] font-bold text-purple-700 uppercase leading-none">
-                AS
-              </div>
-              <div class="flex-1 space-y-1">
-                <div class="flex items-center justify-between">
-                  <span class="text-xs font-semibold text-gray-900">Alice Smith</span>
-                  <span class="text-[10px] text-gray-400">4 hours ago</span>
-                </div>
-                <p class="text-sm text-gray-600">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis feugiat sodales eros, sed maximus sapien
-                  accumsan eget.
-                </p>
-              </div>
-            </div>
-
-            <div
-                class="flex gap-3 items-start p-3 hover:bg-slate-50/50 rounded-xl transition duration-150 border-t border-gray-50">
-              <div
-                  class="flex items-center justify-center h-8 w-8 rounded-full bg-amber-100 text-[10px] font-bold text-amber-700 uppercase leading-none">
-                OB
-              </div>
-              <div class="flex-1 space-y-1">
-                <div class="flex items-center justify-between">
-                  <span class="text-xs font-semibold text-gray-900">Oleh Bohdan</span>
-                  <span class="text-[10px] text-gray-400">Yesterday</span>
-                </div>
-                <p class="text-sm text-gray-600">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis feugiat sodales eros, sed maximus sapien
-                  accumsan eget. Integer non tellus in magna tempor placerat elementum ac.
-                </p>
-              </div>
-            </div>
-
-          </div>
+          {% endif %}
 
         </div>
 
@@ -246,3 +317,4 @@
 
   </div>
 {% endblock %}
+а
