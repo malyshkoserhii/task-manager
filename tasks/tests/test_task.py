@@ -4,8 +4,8 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from django.utils import timezone
 
-from constants.choices import TaskStatus, Priority
-from forms.task import TaskCreateForm
+from tasks.constants.choices import TaskStatus, Priority
+from tasks.forms.task import TaskCreateForm
 from tasks.models import Project, TaskType, Task
 
 
