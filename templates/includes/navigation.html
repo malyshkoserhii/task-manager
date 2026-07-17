@@ -40,16 +40,7 @@
 
           <div
               class="absolute right-0 mt-2.5 w-48 bg-white border border-gray-100 rounded-xl shadow-md py-1.5 z-50 origin-top-right">
-            <a href="{% url 'tasks:project-list' %}"
-               class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"><span>📁</span>
-              My Projects</a>
-            <a href="#"
-               class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"><span>👥</span>
-              My Teams</a>
-            <a href="#"
-               class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"><span>✅</span>
-              My Tasks</a>
-            <div class="border-t border-gray-100 my-1.5"></div>
+            <!-- 💡 Видалили блоки My Projects, My Teams, My Tasks -->
             <a href="{% url 'password_change' %}"
                class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"><span>🔑</span>
               Change Password</a>
@@ -95,19 +86,7 @@
             <div class="border-t border-gray-100 my-1"></div>
 
             <div class="flex flex-col gap-1">
-              <p class="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Personal Menu</p>
-              <a href="{% url 'tasks:project-list' %}"
-                 class="flex items-center gap-2 py-2 px-3 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"><span>📁</span>
-                My Projects</a>
-              <a href="#"
-                 class="flex items-center gap-2 py-2 px-3 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"><span>👥</span>
-                My Teams</a>
-              <a href="#"
-                 class="flex items-center gap-2 py-2 px-3 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"><span>✅</span>
-                My Tasks</a>
-
-              <div class="border-t border-gray-100 my-1.5"></div>
-
+              <!-- 💡 Спростили мобільне меню, прибравши видалені пункти та зайві підзаголовки -->
               <a href="{% url 'password_change' %}"
                  class="flex items-center gap-2 py-2 px-3 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"><span>🔑</span>
                 Change Password</a>
@@ -129,3 +108,28 @@
 
   </div>
 </nav>
+
+{% block extra_js %}
+  <script>
+      document.addEventListener('click', function (event) {
+          const dropdown = document.getElementById('user-dropdown');
+
+          if (dropdown && dropdown.hasAttribute('open') && !dropdown.contains(event.target)) {
+              dropdown.removeAttribute('open');
+          }
+      });
+
+      document.addEventListener('click', function (event) {
+          const desktopDropdown = document.getElementById('user-dropdown');
+          const mobileBurger = document.getElementById('mobile-burger');
+
+          if (desktopDropdown && desktopDropdown.hasAttribute('open') && !desktopDropdown.contains(event.target)) {
+              desktopDropdown.removeAttribute('open');
+          }
+
+          if (mobileBurger && mobileBurger.hasAttribute('open') && !mobileBurger.contains(event.target)) {
+              mobileBurger.removeAttribute('open');
+          }
+      });
+  </script>
+{% endblock %}
