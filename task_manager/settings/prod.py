@@ -1,3 +1,4 @@
+import os # noqa: F401
 from task_manager.settings.base import *  # noqa: F403 F405
 
 # SECURITY WARNING: don't run with debug turned on in production!
