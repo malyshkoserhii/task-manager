@@ -11,9 +11,9 @@ class CommentCreateForm(forms.ModelForm):
             "text": forms.Textarea(
                 attrs={
                     "class": "block w-full rounded-xl border border-gray-200 "
-                             "px-4 py-3 text-sm focus:border-indigo-500 "
-                             "focus:ring-indigo-500 bg-white text-gray-900 "
-                             "shadow-xs resize-y",
+                    "px-4 py-3 text-sm focus:border-indigo-500 "
+                    "focus:ring-indigo-500 bg-white text-gray-900 "
+                    "shadow-xs resize-y",
                     "placeholder": "Write your comment here...",
                     "rows": 3,
                 }
