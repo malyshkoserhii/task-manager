@@ -5,9 +5,10 @@ import os
 import sys
 from dotenv import load_dotenv
 
+
 load_dotenv()
 
-print(os.environ.setdefault("DJANGO_SETTINGS_MODULE", "qwe"))
+
 def main():
     """Run administrative tasks."""
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "task_manager.settings.dev")
