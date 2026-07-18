@@ -1,0 +1,102 @@
+{% load static %}
+
+<div class="flex flex-col justify-center min-h-[calc(100vh-180px)] w-full">
+  <div
+      class="-mx-4 -my-8 min-h-[calc(100vh-140px)] grid grid-cols-1 md:grid-cols-2 bg-white rounded-2xl overflow-hidden shadow-xs border border-gray-100">
+    <div class="hidden md:block relative bg-indigo-900">
+      <div class="absolute inset-0 bg-gradient-to-tr from-indigo-950/80 to-indigo-600/40 z-10"></div>
+      <img
+          src="{% static 'tasks/images/login-gradient.jpg' %}"
+          alt="Abstract workspace background"
+          class="absolute inset-0 w-full h-full object-cover"
+      >
+
+      <div class="absolute bottom-12 left-12 right-12 z-20 text-white">
+        <h3 class="text-3xl font-bold tracking-tight mb-2">Streamline your workflow.</h3>
+        <p class="text-indigo-200 text-sm max-w-sm leading-relaxed">
+          Manage team tasks, track project progress, and deliver high-quality results in one unified workspace.
+        </p>
+      </div>
+    </div>
+    <div class="flex items-center justify-center p-8 sm:p-12 lg:p-16 bg-gray-50/50">
+      <div class="w-full max-w-sm space-y-6">
+
+        <div class="text-center md:text-left">
+          <h2 class="text-3xl font-bold text-gray-950 tracking-tight">Welcome Back</h2>
+          <p class="text-sm text-gray-500 mt-1.5">
+            Don't have an account yet?
+            <a href="{% url 'tasks:registration' %}"
+               class="font-medium text-indigo-600 hover:text-indigo-500 transition-colors">Sign up</a>
+          </p>
+        </div>
+
+        <form action="{% url 'login' %}" method="post" class="space-y-4">
+          {% csrf_token %}
+
+          {% if form.non_field_errors %}
+            <div class="p-3 text-sm text-red-600 bg-red-50 rounded-xl border border-red-100">
+              {% for error in form.non_field_errors %}
+                <p>{{ error }}</p>
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          <div class="space-y-1.5">
+            <label for="{{ form.username.id_for_label }}" class="text-sm font-medium text-gray-700">
+              Username
+            </label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400 text-sm">
+                👤
+              </div>
+              <input
+                  type="text"
+                  name="{{ form.username.name }}"
+                  id="{{ form.username.id_for_label }}"
+                  placeholder="Enter your username"
+                  class="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm placeholder-gray-400 focus:outline-hidden focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all {% if form.username.errors %}border-red-300 focus:border-red-500 focus:ring-red-100{% endif %}"
+                  required
+              >
+            </div>
+            {% if form.username.errors %}
+              <p class="text-xs text-red-600 mt-1">{{ form.username.errors.0 }}</p>
+            {% endif %}
+          </div>
+
+          <div class="space-y-1.5">
+            <div class="flex justify-between items-center">
+              <label for="{{ form.password.id_for_label }}" class="text-sm font-medium text-gray-700">
+                Password
+              </label>
+            </div>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400 text-sm">
+                🔒
+              </div>
+              <input
+                  type="password"
+                  name="{{ form.password.name }}"
+                  id="{{ form.password.id_for_label }}"
+                  placeholder="••••••••"
+                  class="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm placeholder-gray-400 focus:outline-hidden focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all {% if form.password.errors %}border-red-300 focus:border-red-500 focus:ring-red-100{% endif %}"
+                  required
+              >
+            </div>
+            {% if form.password.errors %}
+              <p class="text-xs text-red-600 mt-1">{{ form.password.errors.0 }}</p>
+            {% endif %}
+          </div>
+
+          <button
+              type="submit"
+              class="w-full mt-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 px-4 rounded-xl shadow-sm transition-all duration-200 hover:shadow-md focus:outline-hidden focus:ring-2 focus:ring-indigo-500 active:scale-98 cursor-pointer flex justify-center items-center gap-2"
+          >
+            <span>Sign In</span>
+            <span>🔑</span>
+          </button>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>

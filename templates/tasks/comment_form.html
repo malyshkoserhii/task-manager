@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <style>
+      .edit-comment-box textarea {
+          width: 100% !important;
+          min-height: 120px;
+          padding: 0.75rem 1rem;
+          font-size: 0.875rem;
+          line-height: 1.25rem;
+          color: #111827;
+          background-color: #ffffff;
+          border: 1px solid #e5e7eb;
+          border-radius: 0.75rem;
+          box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+          transition: all 0.15s ease-in-out;
+          resize: vertical;
+      }
+
+      .edit-comment-box textarea:focus {
+          outline: none !important;
+          border-color: #4f46e5 !important;
+          position: relative;
+          --tw-ring-color: #4f46e5;
+          box-shadow: 0 0 0 1px #4f46e5, 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+      }
+  </style>
+
+  <div class="max-w-2xl mx-auto px-4 py-8">
+    <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-xs">
+      <h2 class="text-lg font-bold text-gray-900 mb-4">Edit Comment</h2>
+      <form method="post">
+        {% csrf_token %}
+        <div class="mb-4 edit-comment-box">
+          {{ form.text }}
+        </div>
+        <div class="flex justify-end space-x-2">
+          <button type="submit"
+                  class="px-4 py-2 bg-indigo-600 text-white text-xs font-semibold rounded-lg hover:bg-indigo-700">Save
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
