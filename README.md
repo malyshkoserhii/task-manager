@@ -52,22 +52,32 @@ python3 -m venv venv
 source venv/bin/activate # On Windows use: venv\Scripts\activate
 ```
 
-### 3. Install required packages
+### 3. Configure Environment Variables
+Create a `.env` file in the root directory of the project to manage environment-specific configurations safely. 
+
+For the production or deployment environment, ensure you set the correct configuration module:
+
+```bash
+# Environment setup
+DJANGO_SETTINGS_MODULE=task_manager.settings.dev # or prod
+````
+
+### 4. Install required packages
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Run database migrations
+### 5. Run database migrations
 ```bash
 python manage.py migrate
 ```
 
-### 5. Create your administrator account (Superuser)
+### 6. Create your administrator account (Superuser)
 ```bash
 python manage.py createsuperuser
 ```
 
-### 6. Boot up the local development server
+### 7. Boot up the local development server
 ```bash
 python manage.py runserver
 ```
