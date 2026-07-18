@@ -16,3 +16,4 @@ pyflakes==3.4.0
 python-dotenv==1.2.2
 pytokens==0.4.1
 sqlparse==0.5.5
+whitenoise==6.12.0
