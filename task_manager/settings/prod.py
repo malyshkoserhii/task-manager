@@ -1,13 +1,11 @@
-import os
-
-from task_manager.settings.base import *  # noqa: F403
+from task_manager.settings.base import *  # noqa: F403 F405
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
 ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
-RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')  # noqa: F403 F405
 
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
@@ -17,11 +15,11 @@ if RENDER_EXTERNAL_HOSTNAME:
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ["POSTGRES_DB"],
-        "USER": os.environ["POSTGRES_USER"],
-        "PASSWORD": os.environ["POSTGRES_PASSWORD"],
-        "HOST": os.environ["POSTGRES_HOST"],
-        "PORT": int(os.environ["POSTGRES_DB_PORT"]),
+        "ENGINE": "django.db.backends.postgresql",  # noqa: F405
+        "NAME": os.environ["POSTGRES_DB"],  # noqa: F405
+        "USER": os.environ["POSTGRES_USER"],  # noqa: F405
+        "PASSWORD": os.environ["POSTGRES_PASSWORD"],  # noqa: F405
+        "HOST": os.environ["POSTGRES_HOST"],  # noqa: F405
+        "PORT": int(os.environ["POSTGRES_DB_PORT"]),  # noqa: F405
     }
 }
