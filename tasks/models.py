@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-from task_manager import settings
+from task_manager.settings import base
 from tasks.constants.choices import Priority, TaskStatus
 
 
@@ -50,7 +50,7 @@ class Team(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
     members = models.ManyToManyField(
-        settings.AUTH_USER_MODEL,
+        base.AUTH_USER_MODEL,
         related_name="teams",
     )
 
@@ -70,7 +70,7 @@ class Project(models.Model):
         blank=True,
     )
     creator = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        base.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="created_projects",
     )
@@ -96,7 +96,7 @@ class Task(models.Model):
         max_length=30, choices=TaskStatus, default=TaskStatus.TO_DO
     )
     assignees = models.ManyToManyField(
-        settings.AUTH_USER_MODEL,
+        base.AUTH_USER_MODEL,
         related_name="tasks",
     )
     project = models.ForeignKey(
@@ -124,7 +124,7 @@ class Comment(models.Model):
         related_name="comments",
     )
     author = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        base.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="comments",
     )
