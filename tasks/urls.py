@@ -1,5 +1,6 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
+from django.views.generic import TemplateView
 
 from tasks.views import (
     index,
@@ -26,6 +27,10 @@ urlpatterns = [
     # Public routes
     path("", index, name="index"),
     path("registration/", RegisterUserView.as_view(), name="registration"),
+    path(
+        "googlea74ef67f558d94e9.html",
+        TemplateView.as_view(template_name="googlea74ef67f558d94e9.html"),
+    ),
     # Private routes
     path("projects/", ProjectsListView.as_view(), name="project-list"),
     path("projects/create/", ProjectCreateView.as_view(), name="project-create"),
